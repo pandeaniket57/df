@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#6B0F1A" />
+  <title>Contact DLIGHT FOODS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: light;
+      --cream: #FAF4E8;
+      --ivory: #FFFCF5;
+      --maroon: #6B0F1A;
+      --maroon-dark: #4A0812;
+      --saffron: #E87A1E;
+      --gold: #C9A227;
+      --ink: #2B1F17;
+      --ink-soft: #6B5A4A;
+      --line: rgba(107, 15, 26, .15);
+      --serif: 'Crimson Text', Georgia, serif;
+      --sans: 'Inter', 'Segoe UI', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--ink);
+      background-color: var(--cream);
+      background-image: radial-gradient(rgba(201, 162, 39, .22) .8px, transparent .8px);
+      background-size: 18px 18px;
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .site-header {
+      position: relative;
+      z-index: 1;
+      background: rgba(250, 244, 232, .96);
+      border-bottom: 1px solid var(--line);
+    }
+    .header-inner, main, .site-footer {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+    .header-inner {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand {
+      color: var(--maroon);
+      font-family: var(--serif);
+      font-size: 1.55rem;
+      font-weight: 700;
+    }
+    .brand em { color: var(--saffron); font-weight: 400; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--maroon);
+      font-size: .88rem;
+      font-weight: 600;
+    }
+    .back-link:hover { color: var(--saffron); }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+      align-items: center;
+      gap: clamp(36px, 8vw, 100px);
+      padding-top: clamp(52px, 9vw, 104px);
+      padding-bottom: clamp(56px, 9vw, 112px);
+    }
+    .intro { max-width: 430px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 18px;
+      color: var(--saffron);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ''; width: 24px; height: 2px; background: var(--gold); }
+    h1 {
+      margin: 0 0 14px;
+      color: var(--maroon);
+      font-family: var(--serif);
+      font-size: clamp(2.7rem, 6vw, 4.4rem);
+      font-weight: 600;
+      line-height: .98;
+    }
+    .intro-copy {
+      max-width: 370px;
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+    .reply-note {
+      margin-top: 28px;
+      padding-left: 14px;
+      border-left: 2px solid var(--gold);
+      color: var(--ink-soft);
+      font-size: .85rem;
+      line-height: 1.6;
+    }
+
+    .form-panel {
+      padding: clamp(26px, 5vw, 42px);
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--saffron);
+      background: var(--ivory);
+      box-shadow: 0 18px 48px rgba(74, 8, 18, .08);
+    }
+    .form-panel h2 {
+      margin: 0 0 8px;
+      color: var(--maroon);
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+    .form-hint {
+      margin: 0 0 24px;
+      color: var(--ink-soft);
+      font-size: .88rem;
+      line-height: 1.7;
+    }
+    .field { margin-bottom: 18px; }
+    label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--ink);
+      font-size: .78rem;
+      font-weight: 700;
+    }
+    input, textarea {
+      display: block;
+      width: 100%;
+      border: 1px solid rgba(107, 15, 26, .2);
+      border-radius: 4px;
+      padding: 12px 13px;
+      background: #fff;
+      color: var(--ink);
+      font: 400 .92rem var(--sans);
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+    input::placeholder, textarea::placeholder { color: #9A887A; }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--saffron);
+      box-shadow: 0 0 0 3px rgba(232, 122, 30, .14);
+    }
+    textarea { min-height: 142px; resize: vertical; }
+    .send-button {
+      display: inline-flex;
+      width: 100%;
+      min-height: 50px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-radius: 4px;
+      background: var(--maroon);
+      color: var(--ivory);
+      font-size: .88rem;
+      font-weight: 700;
+      transition: background .18s ease, transform .18s ease;
+      cursor: pointer;
+    }
+    .send-button:hover { background: var(--maroon-dark); }
+    .send-button:active { transform: translateY(1px); }
+    .send-button:disabled { opacity: .65; cursor: wait; }
+    .form-status {
+      min-height: 1.4em;
+      margin: 14px 0 0;
+      color: var(--ink-soft);
+      font-size: .82rem;
+      line-height: 1.5;
+    }
+    .form-status.is-success { color: #1E7A3E; }
+    .form-status.is-error { color: #A12A20; }
+    .site-footer {
+      padding: 18px 0 26px;
+      border-top: 1px solid var(--line);
+      color: var(--ink-soft);
+      font-size: .72rem;
+      text-align: center;
+    }
+
+    @media (max-width: 700px) {
+      .header-inner, main, .site-footer { width: min(100% - 32px, 520px); }
+      .header-inner { min-height: 66px; }
+      main { grid-template-columns: 1fr; gap: 30px; padding-top: 48px; }
+      .intro { max-width: none; }
+      h1 { max-width: 420px; font-size: clamp(2.6rem, 13vw, 3.8rem); }
+      .intro-copy { max-width: 450px; }
+      .reply-note { margin-top: 17px; }
+      .form-panel { padding: 24px 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="DLIGHT FOODS home">DLIGHT <em>FOODS</em></a>
+      <a class="back-link" href="index.html">&larr; Back to shop</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="pageTitle">
+      <span class="eyebrow">We'd love to hear from you</span>
+      <h1 id="pageTitle">Let's talk<br />good food.</h1>
+      <p class="intro-copy">Questions about an order, our festive treats, or something else? Send us a note and our team will get back to you.</p>
+      <p class="reply-note">We usually reply within one business day.</p>
+    </section>
+
+    <section class="form-panel" aria-labelledby="formTitle">
+      <h2 id="formTitle">Send us a message</h2>
+      <p class="form-hint">Questions about an order or our festive treats? Send us a note and we'll be in touch.</p>
+      <form id="contactForm" action="https://docs.google.com/forms/d/e/1FAIpQLSeJ9D2Yu-q0_hcB6FmQTZAmZmLz_WnRQhMgFAwiPIssDJ4o2g/formResponse" method="POST" target="googleFormTarget">
+        <input type="hidden" name="fvv" value="1" />
+        <input type="hidden" name="pageHistory" value="0" />
+        <input type="hidden" name="emailAddress" id="respondentEmail" />
+        <div class="field">
+          <label for="name">Your name</label>
+          <input type="text" id="name" name="entry.814149767" autocomplete="name" placeholder="Name" required />
+        </div>
+        <div class="field">
+          <label for="email">Your email</label>
+          <input type="email" id="email" name="entry.256788301" autocomplete="email" placeholder="you@example.com" required />
+        </div>
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="entry.2066469679" placeholder="How can we help?" required></textarea>
+        </div>
+        <button class="send-button" type="submit">Send Message <span aria-hidden="true">&rarr;</span></button>
+        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+      </form>
+      <iframe name="googleFormTarget" id="googleFormTarget" title="Google Forms submission" hidden></iframe>
+    </section>
+  </main>
+
+  <footer class="site-footer">DLIGHT FOODS · Traditional Taste · Festive Happiness</footer>
+
+  <script>
+    const contactForm = document.getElementById('contactForm');
+    const respondentEmail = document.getElementById('respondentEmail');
+    const formStatus = document.getElementById('formStatus');
+    const submitButton = contactForm.querySelector('button[type="submit"]');
+    const googleFormTarget = document.getElementById('googleFormTarget');
+    let submissionPending = false;
+    let submissionTimer;
+
+    contactForm.addEventListener('submit', () => {
+      respondentEmail.value = document.getElementById('email').value.trim();
+      submissionPending = true;
+      formStatus.className = 'form-status';
+      formStatus.textContent = 'Sending your message...';
+      submitButton.disabled = true;
+      clearTimeout(submissionTimer);
+      submissionTimer = setTimeout(() => {
+        if (!submissionPending) return;
+        submissionPending = false;
+        formStatus.className = 'form-status is-error';
+        formStatus.textContent = 'We could not confirm submission. Please try again.';
+        submitButton.disabled = false;
+      }, 15000);
+    });
+
+    googleFormTarget.addEventListener('load', () => {
+      if (!submissionPending) return;
+      submissionPending = false;
+      clearTimeout(submissionTimer);
+      contactForm.reset();
+      formStatus.className = 'form-status is-success';
+      formStatus.textContent = 'Your message was submitted. Thank you!';
+      submitButton.disabled = false;
+    });
+  </script>
+</body>
+</html>
