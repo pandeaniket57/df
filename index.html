@@ -403,7 +403,7 @@
                             <div class="w-8 h-8 rounded-full bg-amber-600 text-white flex items-center justify-center font-bold text-xs">UPI</div>
                             <div>
                                 <h4 class="font-bold text-amber-900 text-sm">Google Pay & PhonePe Scan & Pay</h4>
-                                <p class="text-xs text-amber-700">UPI ID: <span id="storeUpiId" class="font-mono font-bold">dlightfoods@okaxis</span></p>
+                                <p class="text-xs text-amber-700">UPI ID: <span id="storeUpiId" class="font-mono font-bold">pandeaniket57-2@OKSBI</span></p>
                             </div>
                         </div>
                         <button type="button" onclick="copyUpiId()" class="text-xs bg-white border border-amber-300 text-amber-800 px-3 py-1.5 rounded-lg hover:bg-amber-100 font-semibold transition"><i class="fa-regular fa-copy mr-1"></i> Copy UPI</button>
@@ -412,7 +412,7 @@
                     <!-- Dynamic QR Code Simulation -->
                     <div class="flex flex-col sm:flex-row items-center gap-4 bg-white p-4 rounded-xl border border-amber-100">
                         <div class="w-28 h-28 bg-gray-100 rounded-xl p-2 flex items-center justify-center border border-gray-200 shadow-inner">
-                            <img id="upiQrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=upi://pay?pa=dlightfoods@okaxis%26pn=DlightFoods%26am=300%26cu=INR" alt="UPI QR Code" class="w-full h-full object-contain">
+                            <img id="upiQrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=upi://pay?pa=pandeaniket57-2@OKSBI%26pn=DlightFoods%26am=300%26cu=INR" alt="UPI QR Code" class="w-full h-full object-contain">
                         </div>
                         <div class="space-y-1 text-center sm:text-left">
                             <p class="text-xs text-gray-600">Scan using <strong>Google Pay, PhonePe, Paytm</strong> or any UPI app.</p>
@@ -570,7 +570,7 @@
         const APP_CONFIG = {
             appsScriptUrl: 'https://script.google.com/macros/s/AKfycbxTx5VnCCqUtZhIwnFxmbGDcxiIZxedHMj_BvKGB-YiKFxIV39wwzHwsGIya4jUpYPL/exec',
             googleClientId: 'YOUR_GOOGLE_OAUTH_WEB_CLIENT_ID',
-            upiId: 'dlightfoods@okaxis',
+            upiId: 'pandeaniket57-2@OKSBI',
             whatsapp: '919822012345'
         };
         const ADMIN_EMAIL = 'pandeaniket57@gmail.com';
@@ -594,7 +594,12 @@
         let ordersDB = [];
         let scriptUrl = localStorage.getItem('dlightAppsScriptUrl') || APP_CONFIG.appsScriptUrl;
         let backendCatalogReady = !scriptUrl;
-        let STORE_UPI_ID = localStorage.getItem('dlightStoreUpiId') || APP_CONFIG.upiId;
+        const savedStoreUpiId = localStorage.getItem('dlightStoreUpiId');
+        let STORE_UPI_ID = savedStoreUpiId || APP_CONFIG.upiId;
+        if (STORE_UPI_ID === 'dlightfoods@okaxis') {
+            STORE_UPI_ID = APP_CONFIG.upiId;
+            localStorage.setItem('dlightStoreUpiId', STORE_UPI_ID);
+        }
         let STORE_WHATSAPP = localStorage.getItem('dlightStoreWhatsApp') || APP_CONFIG.whatsapp;
 
         function escapeHtml(value) {
