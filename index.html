@@ -275,7 +275,7 @@
                     <p>To connect this frontend directly to your Google Sheets database, deploy the following Google Apps Script as a Web App:</p>
                     <ol class="list-decimal pl-5 space-y-1">
                         <li>Create a Google Sheet and open <strong>Extensions → Apps Script</strong>.</li>
-                        <li>Paste the project’s <code>Code.gs</code>, run <code>setupSheets</code> and <code>authorizeIntegrations</code>, and approve the requested Sheets, email, and Drive permissions.</li>
+                        <li>Paste the project’s <code>Code.gs</code>, run <code>setupSheets</code> and <code>authorizeIntegrations</code>, and approve the requested Sheets and email permissions.</li>
                         <li>Share the spreadsheet with <strong>pandeaniket57@gmail.com</strong> as an Editor. Keep general access set to Restricted; the web app must not replace the Sheet’s own sharing permissions.</li>
                         <li>Update the Orders tab’s <code>Status</code> cell to <code>Ordered</code>, <code>Packed</code>, <code>In Transit</code>, <code>Out for Delivery</code>, <code>Delivered</code>, or <code>Cancelled</code>. Customers see the latest stage when they track the order.</li>
                         <li>For the Admin-tab sign-in, create a Google OAuth Web application client ID in Google Cloud Console, add your published website origin under Authorized JavaScript origins, and set it as <code>APP_CONFIG.googleClientId</code> below.</li>
@@ -285,7 +285,7 @@
                         <li>Deploy as a Web App, execute as you, grant access to anyone, then paste the <code>/exec</code> URL below. Keep the spreadsheet itself private.</li>
                     </ol>
                     <p class="text-amber-900"><strong>Privacy:</strong> Share the Sheet only with authorized Gmail accounts. The Admin-tab sign-in is a browser UI gate, not a security boundary; anyone with developer tools can bypass a static-page gate. The Apps Script endpoint is public for customer catalog/order flows, so do not add customer-list or admin-data APIs to it.</p>
-                    <p class="text-xs">Apps Script sends order-received emails. Orders below ₹500 include ₹50 shipping; shipping is free at ₹500 and above. Every UPI order must include a JPG, PNG, or WebP payment screenshot (up to 500 KB), saved to a private Drive folder and linked in the store notification email; the UTR is optional. After updating the script, rerun <code>setupSheets</code> and <code>authorizeIntegrations</code>, then deploy a new web app version. A submitted UTR or screenshot is not payment verification and is never marked paid automatically. WhatsApp opens a pre-filled message; unattended delivery requires a separate WhatsApp Business API provider.</p>
+                    <p class="text-xs">Apps Script sends order-received emails. Orders below ₹500 include ₹50 shipping; shipping is free at ₹500 and above. The UPI transaction reference (UTR) is optional. After updating the script, rerun <code>setupSheets</code> and <code>authorizeIntegrations</code>, then deploy a new web app version. A submitted UTR is not payment verification and is never marked paid automatically. WhatsApp opens a pre-filled message; unattended delivery requires a separate WhatsApp Business API provider.</p>
                     <div>
                         <label class="block font-semibold text-gray-700 mb-1">Google Apps Script Web App URL:</label>
                         <div class="flex gap-2">
@@ -424,17 +424,12 @@
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 mb-1">Payment UTR / transaction reference (optional)</label>
                         <input type="text" id="custUtr" placeholder="Enter UTR if available" class="w-full bg-white border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
-                        <p class="mt-1 text-xs text-gray-500">The UTR is optional. Upload a payment screenshot below so the store can review the payment.</p>
-                    </div>
-                    <div>
-                        <label for="custPaymentReceipt" class="block text-xs font-semibold text-gray-700 mb-1">Upload payment screenshot <span class="text-red-600">*</span></label>
-                        <input type="file" id="custPaymentReceipt" accept="image/jpeg,image/png,image/webp" required onchange="validatePaymentReceipt(this)" class="w-full bg-white border border-gray-300 rounded-xl px-3 py-2 text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-amber-100 file:px-3 file:py-1 file:text-xs file:font-semibold file:text-amber-900">
-                        <p id="paymentReceiptHint" class="mt-1 text-xs text-gray-500">Required for UPI orders. JPG, PNG, or WebP up to 500 KB; stored privately in the store's Drive.</p>
+                        <p class="mt-1 text-xs text-gray-500">The UTR is optional. UPI payments are subject to manual verification.</p>
                     </div>
                 </div>
 
                 <div id="codPaymentNotice" class="hidden bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-sm text-emerald-900">
-                    Pay cash to the delivery person when your order arrives. No UPI payment, screenshot, or UTR is needed now.
+                    Pay cash to the delivery person when your order arrives. No UPI payment or UTR is needed now.
                 </div>
 
                 <div class="pt-2">
@@ -1108,15 +1103,6 @@
             document.getElementById('upiPaymentSection').classList.toggle('hidden', !isUpi);
             document.getElementById('codPaymentNotice').classList.toggle('hidden', isUpi);
             document.getElementById('custUtr').required = false;
-            document.getElementById('custPaymentReceipt').required = isUpi;
-            if (!isUpi) {
-                document.getElementById('custPaymentReceipt').value = '';
-                document.getElementById('paymentReceiptHint').textContent =
-                    'Screenshot upload is required for UPI orders only.';
-            } else {
-                document.getElementById('paymentReceiptHint').textContent =
-                    "Required for UPI orders. JPG, PNG, or WebP up to 500 KB; stored privately in the store's Drive.";
-            }
             document.getElementById('placeOrderButtonText').innerText = isUpi
                 ? 'I’ve Paid — Place Order'
                 : 'Place Cash on Delivery Order';
@@ -1127,47 +1113,6 @@
 
         function closeCheckoutModal() {
             document.getElementById('checkoutModal').classList.add('hidden');
-        }
-
-        function validatePaymentReceipt(input) {
-            const file = input.files[0];
-            const hint = document.getElementById('paymentReceiptHint');
-            if (!file) return;
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-            if (!allowedTypes.includes(file.type)) {
-                input.value = '';
-                hint.textContent = 'Choose a JPG, PNG, or WebP payment screenshot.';
-                showToast('Unsupported screenshot type. Choose JPG, PNG, or WebP.', 'error');
-                return;
-            }
-            if (file.size > 512 * 1024) {
-                input.value = '';
-                hint.textContent = 'The selected file is larger than 500 KB.';
-                showToast('Payment screenshot must be 500 KB or smaller.', 'error');
-                return;
-            }
-            hint.textContent = `${file.name} selected (${Math.ceil(file.size / 1024)} KB).`;
-        }
-
-        function readPaymentReceipt(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    const result = String(reader.result || '');
-                    const separator = result.indexOf(',');
-                    if (separator < 0) {
-                        reject(new Error('Could not read the payment receipt file.'));
-                        return;
-                    }
-                    resolve({
-                        name: file.name,
-                        type: file.type,
-                        data: result.slice(separator + 1)
-                    });
-                };
-                reader.onerror = () => reject(new Error('Could not read the payment receipt file.'));
-                reader.readAsDataURL(file);
-            });
         }
 
         function copyUpiId() {
@@ -1221,18 +1166,8 @@
             const email = document.getElementById('custEmail').value.trim();
             const utr = document.getElementById('custUtr').value.trim();
             const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-            const receiptFile = document.getElementById('custPaymentReceipt').files[0];
             if (!name || !address || phone.replace(/\D/g, '').length < 10) {
                 showToast('Enter your name, address, and a valid phone number.', 'error');
-                return;
-            }
-            if (paymentMethod === 'UPI' && !receiptFile) {
-                showToast('Upload a screenshot of your UPI payment before placing the order.', 'error');
-                document.getElementById('custPaymentReceipt').focus();
-                return;
-            }
-            if (receiptFile && !sendToSheets) {
-                showToast('Connect the Google Apps Script endpoint to upload payment screenshots.', 'error');
                 return;
             }
             const subtotal = cart.reduce((sum, item) => sum + item.unitPrice * item.qty, 0);
@@ -1258,9 +1193,6 @@
                 total,
                 paymentMethod,
                 utr,
-                receipt: paymentMethod === 'UPI' && receiptFile
-                    ? await readPaymentReceipt(receiptFile)
-                    : null,
                 paymentStatus: paymentMethod === 'COD'
                     ? 'Cash on delivery - collect at delivery'
                     : 'Reference submitted - verification required',
@@ -1297,7 +1229,6 @@
 
             if (sendToSheets) {
                 const orderSummary = { ...order };
-                delete orderSummary.receipt;
                 orderSummary.date = new Date(order.createdAt).toLocaleString();
                 window.pendingOrderSummary = orderSummary;
                 ordersDB.unshift({
@@ -1308,7 +1239,6 @@
                 renderAdminOrders();
             } else {
                 const orderSummary = { ...order };
-                delete orderSummary.receipt;
                 orderSummary.date = new Date(order.createdAt).toLocaleString();
                 window.pendingOrderSummary = orderSummary;
             }
@@ -1326,7 +1256,7 @@
                     ? 'Cash on Delivery — notify the store via WhatsApp'
                     : 'UPI reference submitted — Sheets are not connected');
             document.getElementById('orderSuccessMessage').innerText = sendToSheets
-                ? `Your order request was sent to Google Sheets.${receiptFile ? ' Your receipt upload was included for private Drive storage.' : ''}${email ? ' An order-received email will be sent if email notifications are configured.' : ''} Keep your Order ID for tracking.`
+                ? `Your order request was sent to Google Sheets.${email ? ' An order-received email will be sent if email notifications are configured.' : ''} Keep your Order ID for tracking.`
                 : 'Your order details are ready, but Google Sheets is not connected. Send the order to WhatsApp to notify the store.';
             document.getElementById('orderSuccessModal').classList.remove('hidden');
         }
@@ -1697,7 +1627,7 @@
                     <tr class="summary"><td colspan="3">Shipping</td><td>${shipping ? `₹${shipping}` : 'Free'}</td></tr>
                     <tr class="grand-total"><td colspan="3">Order total</td><td>₹${Number(order.total)}</td></tr></tbody></table>
                     <p><strong>Payment:</strong> ${escapeHtml(order.paymentStatus || 'Reference pending manual verification')}</p>
-                    <p class="note">UPI references and receipts are subject to manual verification.</p>
+                    <p class="note">UPI references are subject to manual verification.</p>
                 </section>`;
             }).join('');
             invoiceWindow.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(title)}</title><style>
